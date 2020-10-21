@@ -1,19 +1,29 @@
 import telebot as tb
 from telebot import types
+
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
+from random import randint
 
 
-def parse(img):
-    url = 'https://unsplash.com/photos/' + img
-    r = requests.get(url).text
-    content = BeautifulSoup(r, 'html.parser')
+def parse(num):
+    img1 = []
+    links_dict = {
+        '1': 'https://unsplash.com/t/nature',
+        '2': 'https://unsplash.com/t/interiors',
+        '3': 'https://unsplash.com/t/street-photography'
+    }
+    session = requests.Session()
+    request = session.get(links_dict[num])
+    if request.status_code == 200:
+        soup = bs(request.content, 'html.parser')
+        imgs = soup.find_all('img', class_='_2VWD4 _2zEKz')
+        for img in imgs:
+            img1.append(img.get('src'))
+    return img1[randint(0, len(img1))]
 
-    img_news = content.find('img').get('src')
 
-
-bot = tb.TeleBot('')
-link = 'https://unsplash.com/photos/'
+bot = tb.TeleBot('796324726:AAFu7JnYj1kD_2ZvK-3luUzc_b2_FA33vDY')
 
 
 @bot.message_handler(commands=['start'])
@@ -41,16 +51,11 @@ def callback_inline(call):
     try:
         if call.message:
             if call.data == '1':
-                bot.send_message(call.message.chat.id, link + 'nSy8T8Oxrcs')
-                bot.send_photo(call.message.chat.id, parse('PJ61QqdVWMY'))
+                bot.send_photo(call.message.chat.id, parse('1'))
             elif call.data == '2':
-                bot.send_message(call.message.chat.id, link + 'Iy9h7vTRUpo')
-                bot.send_photo(call.message.chat.id, parse('PJ61QqdVWMY'))
+                bot.send_photo(call.message.chat.id, parse('2'))
             elif call.data == '3':
-                bot.send_message(call.message.chat.id, link + 'PJ61QqdVWMY')
-                bot.send_photo(call.message.chat.id, parse('PJ61QqdVWMY'))
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Как дела?',
-                                  reply_markup=None)
+                bot.send_photo(call.message.chat.id, parse('3'))
     except Exception as e:
         print(repr(e))
 
