@@ -12,7 +12,7 @@ def parse(img):
     img_news = content.find('img').get('src')
 
 
-bot = tb.TeleBot('796324726:AAFu7JnYj1kD_2ZvK-3luUzc_b2_FA33vDY')
+bot = tb.TeleBot('')
 link = 'https://unsplash.com/photos/'
 
 
