@@ -23,7 +23,7 @@ def parse(num):
     return img1[randint(0, len(img1))]
 
 
-bot = tb.TeleBot('796324726:AAFu7JnYj1kD_2ZvK-3luUzc_b2_FA33vDY')
+bot = tb.TeleBot('')
 
 
 @bot.message_handler(commands=['start'])
